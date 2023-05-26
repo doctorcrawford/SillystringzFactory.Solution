@@ -18,21 +18,6 @@ namespace Factory.Migrations
                 .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("EngineerMachine", b =>
-                {
-                    b.Property<int>("EngineersEngineerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MachinesMachineId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EngineersEngineerId", "MachinesMachineId");
-
-                    b.HasIndex("MachinesMachineId");
-
-                    b.ToTable("EngineerMachine");
-                });
-
             modelBuilder.Entity("Factory.Models.Engineer", b =>
                 {
                     b.Property<int>("EngineerId")
@@ -84,31 +69,16 @@ namespace Factory.Migrations
                     b.ToTable("Machines");
                 });
 
-            modelBuilder.Entity("EngineerMachine", b =>
-                {
-                    b.HasOne("Factory.Models.Engineer", null)
-                        .WithMany()
-                        .HasForeignKey("EngineersEngineerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Factory.Models.Machine", null)
-                        .WithMany()
-                        .HasForeignKey("MachinesMachineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Factory.Models.EngineerMachine", b =>
                 {
                     b.HasOne("Factory.Models.Engineer", "Engineer")
-                        .WithMany()
+                        .WithMany("EngineerMachines")
                         .HasForeignKey("EngineerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Factory.Models.Machine", "Machine")
-                        .WithMany()
+                        .WithMany("EngineerMachines")
                         .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -116,6 +86,16 @@ namespace Factory.Migrations
                     b.Navigation("Engineer");
 
                     b.Navigation("Machine");
+                });
+
+            modelBuilder.Entity("Factory.Models.Engineer", b =>
+                {
+                    b.Navigation("EngineerMachines");
+                });
+
+            modelBuilder.Entity("Factory.Models.Machine", b =>
+                {
+                    b.Navigation("EngineerMachines");
                 });
 #pragma warning restore 612, 618
         }
