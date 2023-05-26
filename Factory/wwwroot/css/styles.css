@@ -31,6 +31,8 @@ a {
   margin: auto;
   margin-top: 2rem;
   padding: 1.5rem;
+	padding-left: 12%;
+	padding-right: 12%;
   border: 2px solid #0E3B43;
 }
 
@@ -60,4 +62,15 @@ ul {
 	width: fit-content;
 	display: inline-block;
 	margin-right: 1rem;
+}
+
+.btn  {
+	background-color: #9af0ff8e;
+	border: 1px solid black;
+	margin-left: 2rem;
+}
+
+label {
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 }

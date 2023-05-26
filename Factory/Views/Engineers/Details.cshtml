@@ -7,29 +7,31 @@
 
 <h2>Engineer Details</h2>
 <hr />
-<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>  
+<div class="basic">
+  <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
 
-@if(@Model.EngineerMachines.Count == 0)
-{
-  <p>This engineer does not have any machines yet!</p>
-}
-else
-{
-  <h4>This engineer has the following machines:</h4>
-  <ul>
-    @foreach(EngineerMachine join in Model.EngineerMachines)
-    {
-      <li>Machine: @join.Machine.Name</li>
-      @using (Html.BeginForm("DeleteJoin", "Engineers"))
+  @if (@Model.EngineerMachines.Count == 0)
+  {
+    <p>This engineer does not have any machines yet!</p>
+  }
+  else
+  {
+    <h4>This engineer has the following machines:</h4>
+    <ul>
+      @foreach (EngineerMachine join in Model.EngineerMachines)
       {
-        @Html.Hidden("joinId", @join.EngineerMachineId)
-        <input type="submit" value="Delete"/>
+        <li>Machine: @join.Machine.Name</li>
+        @using (Html.BeginForm("DeleteJoin", "Engineers"))
+        {
+          @Html.Hidden("joinId", @join.EngineerMachineId)
+          <input type="submit" value="Delete" />
+        }
       }
-    }
-  </ul>
-}
+    </ul>
+  }
 
-<p>@Html.ActionLink("Back to list", "Index")</p>
-<p>@Html.ActionLink("Edit engineer", "Edit", new { id = Model.EngineerId })</p>
-<p>@Html.ActionLink("Add a Machine", "AddMachine", new { id = Model.EngineerId })</p>
-<p>@Html.ActionLink("Delete engineer", "Delete", new { id = Model.EngineerId })</p>
+  <p>@Html.ActionLink("Back to list", "Index")</p>
+  <p>@Html.ActionLink("Edit engineer", "Edit", new { id = Model.EngineerId })</p>
+  <p>@Html.ActionLink("Add a Machine", "AddMachine", new { id = Model.EngineerId })</p>
+  <p>@Html.ActionLink("Delete engineer", "Delete", new { id = Model.EngineerId })</p>
+</div>
