@@ -54,7 +54,6 @@ public class EngineersController : Controller
   public ActionResult Edit(int id)
   {
     Engineer thisEngineer = _db.Engineers.FirstOrDefault(engineer => engineer.EngineerId == id);
-    // ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
     return View(thisEngineer);
   }
 
