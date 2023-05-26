@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Factory.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Factory.Controllers;
 
@@ -24,6 +25,8 @@ public class MachinesController : Controller
 
   public ActionResult Create()
   {
+    var Status = Enum.GetValues<Machine.StatusType>();
+    ViewBag.Status = new SelectList(Status, "Status");
     return View();
   }
 
@@ -54,7 +57,6 @@ public class MachinesController : Controller
   public ActionResult Edit(int id)
   {
     Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
-    // ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
     return View(thisMachine);
   }
 
