@@ -85,6 +85,7 @@ public class MachinesController : Controller
     {
       Machine thisMachine = _db.Machines.FirstOrDefault(machines => machines.MachineId == id);
       ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
+      ViewBag.Engineers = _db.Engineers.ToList();
       return View(thisMachine);
     }
 
