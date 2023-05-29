@@ -1,13 +1,13 @@
 @{
   Layout = "_Layout";
 }
-
 @model Factory.Models.Machine
 
 <h4>Add a new machine</h4>
 
 <div class="basic">
   <p>@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", @style = "font-weight: 600;" })
+  <p>@Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", @style = "font-weight: 600;" })
   </p>
 
   @using (Html.BeginForm())
@@ -16,7 +16,7 @@
     @Html.TextBoxFor(model => model.Name)
 
     @Html.LabelFor(model => model.Status)
-    @Html.DropDownList("Status")
+    @Html.DropDownList("Status", new SelectList(ViewBag.StatusDropdownOptions,"Value","DisplayName"))
 
     <input type="submit" value="Add new machine" class="btn btn-default" />
   }

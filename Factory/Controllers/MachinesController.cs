@@ -23,11 +23,31 @@ public class MachinesController : Controller
     return View(model);
   }
 
+  public static List<DropdownValue> StatusDropdownValues = Enum
+      .GetValues<Machine.StatusType>()
+      .Select(h =>
+      {
+        var asString = h.ToString();
+        return new DropdownValue { Value = asString, DisplayName = asString };
+      })
+      .ToList();
+
+
+  public class DropdownValue
+  {
+    public string Value { get; set; }
+    public string DisplayName { get; set; }
+  }
+
   public ActionResult Create()
   {
-    var Status = Enum.GetValues<Machine.StatusType>();
-    ViewBag.Status = new SelectList(Status, "Status");
+    SetDataForCreatePage();
     return View();
+  }
+
+  private void SetDataForCreatePage()
+  {
+    ViewBag.StatusDropdownOptions = StatusDropdownValues;
   }
 
   [HttpPost]
@@ -35,12 +55,14 @@ public class MachinesController : Controller
   {
     if (!ModelState.IsValid)
     {
+      SetDataForCreatePage();
       return View(machine);
     }
     else
     {
       _db.Machines.Add(machine);
       _db.SaveChanges();
+
       return RedirectToAction("Index");
     }
   }
@@ -84,35 +106,35 @@ public class MachinesController : Controller
   }
 
   public ActionResult AddEngineer(int id)
-    {
-      Machine thisMachine = _db.Machines.FirstOrDefault(machines => machines.MachineId == id);
-      ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
-      ViewBag.Engineers = _db.Engineers.ToList();
-      return View(thisMachine);
-    }
+  {
+    Machine thisMachine = _db.Machines.FirstOrDefault(machines => machines.MachineId == id);
+    ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
+    ViewBag.Engineers = _db.Engineers.ToList();
+    return View(thisMachine);
+  }
 
-    [HttpPost]
-    public ActionResult AddEngineer(Machine machine, int engineerId)
+  [HttpPost]
+  public ActionResult AddEngineer(Machine machine, int engineerId)
+  {
+#nullable enable
+    EngineerMachine? joinEntity = _db.EngineerMachines.FirstOrDefault(join => (join.EngineerId == engineerId && join.MachineId == machine.MachineId));
+#nullable disable
+    if (joinEntity == null && engineerId != 0)
     {
-      #nullable enable
-      EngineerMachine? joinEntity = _db.EngineerMachines.FirstOrDefault(join => (join.EngineerId == engineerId && join.MachineId == machine.MachineId));
-      #nullable disable
-      if (joinEntity == null && engineerId != 0)
-      {
-        _db.EngineerMachines.Add(new EngineerMachine() { EngineerId = engineerId, MachineId = machine.MachineId });
-        _db.SaveChanges();
-      }
-      return RedirectToAction("Details", new { id = machine.MachineId });
-    }   
-
-    [HttpPost]
-    public ActionResult DeleteJoin(int joinId)
-    {
-      EngineerMachine engMachine = _db.EngineerMachines
-            .Include(e => e.Machine)
-            .FirstOrDefault(entry => entry.EngineerMachineId == joinId);
-      _db.EngineerMachines.Remove(engMachine);
+      _db.EngineerMachines.Add(new EngineerMachine() { EngineerId = engineerId, MachineId = machine.MachineId });
       _db.SaveChanges();
-      return RedirectToAction("Details", new { id = engMachine.Machine.MachineId});
-    } 
+    }
+    return RedirectToAction("Details", new { id = machine.MachineId });
+  }
+
+  [HttpPost]
+  public ActionResult DeleteJoin(int joinId)
+  {
+    EngineerMachine engMachine = _db.EngineerMachines
+          .Include(e => e.Machine)
+          .FirstOrDefault(entry => entry.EngineerMachineId == joinId);
+    _db.EngineerMachines.Remove(engMachine);
+    _db.SaveChanges();
+    return RedirectToAction("Details", new { id = engMachine.Machine.MachineId });
+  }
 }
