@@ -19,8 +19,11 @@ public class MachinesController : Controller
 
   public ActionResult Index()
   {
-    List<Machine> model = _db.Machines.ToList();
-    return View(model);
+    var splashPageInfo = new SplashPageInfo{
+      Machines = _db.Machines
+    };
+    
+    return View(splashPageInfo);
   }
 
   public static List<DropdownValue> StatusDropdownValues = Enum
@@ -42,6 +45,7 @@ public class MachinesController : Controller
   public ActionResult Create()
   {
     SetDataForCreatePage();
+
     return View();
   }
 
@@ -79,6 +83,8 @@ public class MachinesController : Controller
   public ActionResult Edit(int id)
   {
     Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
+    SetDataForCreatePage();
+
     return View(thisMachine);
   }
 
@@ -87,12 +93,14 @@ public class MachinesController : Controller
   {
     _db.Machines.Update(machine);
     _db.SaveChanges();
+
     return RedirectToAction("Index");
   }
 
   public ActionResult Delete(int id)
   {
     Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
+    
     return View(thisMachine);
   }
 
@@ -102,6 +110,7 @@ public class MachinesController : Controller
     Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
     _db.Machines.Remove(thisMachine);
     _db.SaveChanges();
+
     return RedirectToAction("Index");
   }
 
@@ -110,6 +119,7 @@ public class MachinesController : Controller
     Machine thisMachine = _db.Machines.FirstOrDefault(machines => machines.MachineId == id);
     ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
     ViewBag.Engineers = _db.Engineers.ToList();
+
     return View(thisMachine);
   }
 
@@ -124,6 +134,7 @@ public class MachinesController : Controller
       _db.EngineerMachines.Add(new EngineerMachine() { EngineerId = engineerId, MachineId = machine.MachineId });
       _db.SaveChanges();
     }
+
     return RedirectToAction("Details", new { id = machine.MachineId });
   }
 
@@ -135,6 +146,7 @@ public class MachinesController : Controller
           .FirstOrDefault(entry => entry.EngineerMachineId == joinId);
     _db.EngineerMachines.Remove(engMachine);
     _db.SaveChanges();
+
     return RedirectToAction("Details", new { id = engMachine.Machine.MachineId });
   }
 }

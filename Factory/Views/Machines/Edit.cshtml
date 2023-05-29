@@ -16,7 +16,10 @@
     @Html.LabelFor(model => model.Name)
     @Html.EditorFor(model => model.Name)
 
-    <input type="submit" value="Save" class="btn btn-default"/>
+    @Html.LabelFor(model => model.Status)
+    @Html.DropDownList("Status", new SelectList(ViewBag.StatusDropdownOptions,"Value","DisplayName"))
+
+    <input type="submit" value="Save" class="btn btn-default" />
   }
 
   <p>@Html.ActionLink("Back to list", "Index")</p>

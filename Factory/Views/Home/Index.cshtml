@@ -2,21 +2,25 @@
   Layout = "_Layout";
 }
 
-@using Factory.Models
+@using Factory
+@model Factory.Controllers.SplashPageInfo
 
 <h1>Sillystringz Factory</h1>
 <hr>
 
 <div class="basic">
   <h4>Machines</h4>
-  @if (Model["machines"].Length == 0)
+  @if (Model.Machines.Count() == 0)
   {
     <p>No machines have been added yet!</p>
   }
   <ul>
-    @foreach (Machine machine in Model["machines"])
+    @foreach (var machine in Model.Machines)
     {
-      <li>@Html.ActionLink(machine.Name, "Details", "Machines", new { id = machine.MachineId})</li>
+      <li>@nameof(machine.Name): @Html.ActionLink(machine.Name, "Details", "Machines", new { id = machine.MachineId})</li>
+      <ul>
+        <li>@nameof(machine.Status): @machine.Status</li>
+      </ul>
     }
   </ul>
 
@@ -26,14 +30,14 @@
 
 <div class="basic">
   <h4>Engineers</h4>
-  @if (Model["engineers"].Length == 0)
+  @if (Model.Engineers.Count() == 0)
   {
     <p>No engineers have been added yet!</p>
   }
   <ul>
-    @foreach (Engineer engineer in Model["engineers"])
+    @foreach (var engineer in Model.Engineers)
     {
-      <li>@Html.ActionLink(@engineer.Name, "Details", "Engineers", new { id = @engineer.EngineerId})</li>
+      <li>@nameof(engineer.Name): @Html.ActionLink(@engineer.Name, "Details", "Engineers", new { id = @engineer.EngineerId})</li>
     }
   </ul>
 

@@ -17,11 +17,16 @@ public class HomeController : Controller
   [HttpGet("/")]
   public ActionResult Index()
   {
-    Engineer[] engineers = _db.Engineers.ToArray();
-    Machine[] machines = _db.Machines.ToArray();
-    Dictionary<string,object[]> model = new Dictionary<string, object[]>();
-    model.Add("engineers", engineers);
-    model.Add("machines", machines);
-    return View(model);
+    var splashPageInfo = new SplashPageInfo {
+      Engineers = _db.Engineers,
+      Machines = _db.Machines
+    };
+    return View(splashPageInfo);
   }
+}
+
+public class SplashPageInfo
+{
+  public IEnumerable<Engineer> Engineers {get; set;}
+  public IEnumerable<Machine> Machines {get; set;}
 }
